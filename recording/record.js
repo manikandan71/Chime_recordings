@@ -75,17 +75,18 @@ transcodeStreamToOutput.stderr.on('data', data => {
 // const hour = timestamp.getUTCHours();
 // const fileName = `${year}/${month}/${day}/${hour}/${fileTimestamp}.mp4`;
 
-function fileName(){
+function file(){
     const timestamp = new Date();
     const fileTimestamp = timestamp.toISOString().substring(0,19);
     const year = timestamp.getFullYear();
     const month = timestamp.getMonth() + 1;
     const day = timestamp.getDate();
     const hour = timestamp.getUTCHours();
-    return  `${year}/${month}/${day}/${hour}/${fileTimestamp}.mp4`;
+    const bucketName = `${year}/${month}/${day}/${hour}/${fileTimestamp}.mp4
+    return bucketName;
 }
 
-const fileName = fileName();
+const fileName = file();
 new S3Uploader(BUCKET_NAME, fileName).uploadStream(transcodeStreamToOutput.stdout);
 
 // event handler for docker stop, not exit until upload completes
