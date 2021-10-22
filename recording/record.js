@@ -82,7 +82,7 @@ function file(){
     const month = timestamp.getMonth() + 1;
     const day = timestamp.getDate();
     const hour = timestamp.getUTCHours();
-    const bucketName = `${year}/${month}/${day}/${hour}/${fileTimestamp}.mp4
+    const bucketName = `${year}/${month}/${day}/${hour}/${fileTimestamp}.mp4`;
     return bucketName;
 }
 
