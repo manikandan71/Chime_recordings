@@ -6,6 +6,9 @@ const { S3Uploader } = require('./utils/upload');
 
 const MEETING_URL = process.env.MEETING_URL || 'Not present in environment';
 console.log(`[recording process] MEETING_URL: ${MEETING_URL}`);
+const meet = new URL(MEETING_URL)
+console.log(meet);
+const buck_no = meet.searchParams.get('buck_id');
 
 const args = process.argv.slice(2);
 const BUCKET_NAME = args[0];
@@ -67,26 +70,13 @@ transcodeStreamToOutput.stderr.on('data', data => {
     console.log(`[transcodeStreamToOutput process] stderr: ${(new Date()).toISOString()} ffmpeg: ${data}`);
 });
 
-// const timestamp = new Date();
-// const fileTimestamp = timestamp.toISOString().substring(0,19);
-// const year = timestamp.getFullYear();
-// const month = timestamp.getMonth() + 1;
-// const day = timestamp.getDate();
-// const hour = timestamp.getUTCHours();
-// const fileName = `${year}/${month}/${day}/${hour}/${fileTimestamp}.mp4`;
-
-function file(){
-    const timestamp = new Date();
-    const fileTimestamp = timestamp.toISOString().substring(0,19);
-    const year = timestamp.getFullYear();
-    const month = timestamp.getMonth() + 1;
-    const day = timestamp.getDate();
-    const hour = timestamp.getUTCHours();
-    const bucketName = `${year}/${month}/${day}/${hour}/${fileTimestamp}.mp4`;
-    return bucketName;
-}
-
-const fileName = file();
+const timestamp = new Date();
+const fileTimestamp = timestamp.toISOString().substring(0,19);
+const year = timestamp.getFullYear();
+const month = timestamp.getMonth() + 1;
+const day = timestamp.getDate();
+const hour = timestamp.getUTCHours();
+const fileName = `${year}/${month}/${day}/${hour}/${buck_no}.mp4`;
 new S3Uploader(BUCKET_NAME, fileName).uploadStream(transcodeStreamToOutput.stdout);
 
 // event handler for docker stop, not exit until upload completes
